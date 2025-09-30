@@ -1,0 +1,44 @@
+No files changed, compilation skipped
+proptest: Aborting shrinking after the PROPTEST_MAX_SHRINK_ITERS environment variable or ProptestConfig.max_shrink_iters iterations (set 0 to a large(r) value to shrink more; current configuration: 0 iterations)
+
+Ran 13 tests for test/unit/liquidation/LiquidationEngineTest.t.sol:LiquidationEngineTest
+[FAIL. Reason: InsufficientCollateral(1, 19102 [1.91e4], 15919 [1.591e4]); counterexample: calldata=0xbe8726dc0000000000000000000000000000000000000000000000000000000000003e2f00000000000000000000000000000000000000000000000000000000000001b8 args=[15919 [1.591e4], 440]] testFuzz_CalculateLiquidationPenalty(uint256,uint256) (runs: 0, μ: 0, ~: 0)
+[FAIL. Reason: Error != expected error:  != 0xbe6465f6] test_CalculateLiquidationPenalty_RevertIf_NotLiquidatable() (gas: 259314)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_CalculateLiquidationPenalty_Success() (gas: 263994)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_CheckLiquidation_Liquidatable() (gas: 264017)
+[PASS] test_CheckLiquidation_NotLiquidatable() (gas: 256817)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_GetLiquidationInfo_Success() (gas: 264015)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_LiquidateCDP_RevertIf_DelayNotMet() (gas: 264017)
+[FAIL. Reason: Error != expected error:  != 0xbe6465f6] test_LiquidateCDP_RevertIf_NotLiquidatable() (gas: 271659)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_LiquidateCDP_RevertIf_Unauthorized() (gas: 263995)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_LiquidateCDP_Success() (gas: 264018)
+[FAIL. Reason: Error != expected error:  != 0xb0b49cc0] test_SetLiquidationDelay_RevertIf_TooLong() (gas: 13412)
+[PASS] test_SetLiquidationDelay_RevertIf_Unauthorized() (gas: 13378)
+[PASS] test_SetLiquidationDelay_Success() (gas: 20606)
+Suite result: FAILED. 3 passed; 10 failed; 0 skipped; finished in 26.49ms (103.00ms CPU time)
+
+Ran 1 test suite in 203.01ms (26.49ms CPU time): 3 tests passed, 10 failed, 0 skipped (13 total tests)
+
+
+Test Summary:
+
+╭-----------------------+--------+--------+---------╮
+|       Test Suite      | Passed | Failed | Skipped |
++===================================================+
+| LiquidationEngineTest |    3   |   10   |    0    |
+╰-----------------------+--------+--------+---------╯
+
+Failing tests:
+Encountered 10 failing tests in test/unit/liquidation/LiquidationEngineTest.t.sol:LiquidationEngineTest
+[FAIL. Reason: InsufficientCollateral(1, 19102 [1.91e4], 15919 [1.591e4]); counterexample: calldata=0xbe8726dc0000000000000000000000000000000000000000000000000000000000003e2f00000000000000000000000000000000000000000000000000000000000001b8 args=[15919 [1.591e4], 440]] testFuzz_CalculateLiquidationPenalty(uint256,uint256) (runs: 0, μ: 0, ~: 0)
+[FAIL. Reason: Error != expected error:  != 0xbe6465f6] test_CalculateLiquidationPenalty_RevertIf_NotLiquidatable() (gas: 259314)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_CalculateLiquidationPenalty_Success() (gas: 263994)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_CheckLiquidation_Liquidatable() (gas: 264017)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_GetLiquidationInfo_Success() (gas: 264015)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_LiquidateCDP_RevertIf_DelayNotMet() (gas: 264017)
+[FAIL. Reason: Error != expected error:  != 0xbe6465f6] test_LiquidateCDP_RevertIf_NotLiquidatable() (gas: 271659)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_LiquidateCDP_RevertIf_Unauthorized() (gas: 263995)
+[FAIL. Reason: InsufficientCollateral(1, 120000000000000000000 [1.2e20], 100000000000000000000 [1e20])] test_LiquidateCDP_Success() (gas: 264018)
+[FAIL. Reason: Error != expected error:  != 0xb0b49cc0] test_SetLiquidationDelay_RevertIf_TooLong() (gas: 13412)
+
+Encountered a total of 10 failing tests, 3 tests succeeded
