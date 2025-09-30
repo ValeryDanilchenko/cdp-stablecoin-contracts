@@ -1,24 +1,27 @@
-Compiler run failed:
-Error (6275): Source "src/core/PriceOracle.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
-ParserError: Source "src/core/PriceOracle.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
- --> test/unit/oracle/PriceOracleTest.t.sol:5:1:
-  |
-5 | import {PriceOracle} from "../../../src/core/PriceOracle.sol";
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+No files changed, compilation skipped
 
-Error (6275): Source "src/mocks/MockPriceFeed.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
-ParserError: Source "src/mocks/MockPriceFeed.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
- --> test/unit/oracle/PriceOracleTest.t.sol:6:1:
-  |
-6 | import {MockPriceFeed} from "../../../src/mocks/MockPriceFeed.sol";
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Ran 12 tests for test/unit/core/CDPManagerTest.t.sol:CDPManagerTest
+[PASS] testFuzz_MintStablecoin_WithinLiquidationRatio(uint256,uint256) (runs: 257, μ: 338707, ~: 338707)
+[PASS] testFuzz_OpenCDP_ValidAmounts(uint256) (runs: 257, μ: 251000, ~: 251000)
+[PASS] test_DepositCollateral_RevertIf_NotOwner() (gas: 256612)
+[PASS] test_DepositCollateral_Success() (gas: 258757)
+[PASS] test_MintStablecoin_RevertIf_ExceedsLiquidationRatio() (gas: 262238)
+[PASS] test_MintStablecoin_Success() (gas: 340751)
+[PASS] test_OpenCDP_RevertIf_InvalidCollateral() (gas: 531133)
+[PASS] test_OpenCDP_RevertIf_ZeroAmount() (gas: 20500)
+[PASS] test_OpenCDP_Success() (gas: 255522)
+[PASS] test_RepayDebt_Success() (gas: 352378)
+[PASS] test_WithdrawCollateral_RevertIf_ExceedsLiquidationRatio() (gas: 343682)
+[PASS] test_WithdrawCollateral_Success() (gas: 260056)
+Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 141.72ms (119.71ms CPU time)
 
-Error (6275): Source "src/interfaces/IPriceOracle.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
-ParserError: Source "src/interfaces/IPriceOracle.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
- --> test/unit/oracle/PriceOracleTest.t.sol:8:1:
-  |
-8 | import {IPriceOracle} from "../../../src/interfaces/IPriceOracle.sol";
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Ran 1 test suite in 359.68ms (141.72ms CPU time): 12 tests passed, 0 failed, 0 skipped (12 total tests)
 
-Error: 
-Compilation failed
+
+Test Summary:
+
+╭----------------+--------+--------+---------╮
+|   Test Suite   | Passed | Failed | Skipped |
++============================================+
+| CDPManagerTest |   12   |    0   |    0    |
+╰----------------+--------+--------+---------╯
