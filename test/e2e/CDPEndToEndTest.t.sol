@@ -73,7 +73,7 @@ contract CDPEndToEndTest is Test {
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
         collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
-        cdpManager.grantRole(cdpManager.ADMIN_ROLE(), admin);
+        cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         liquidationEngine.grantRole(liquidationEngine.LIQUIDATOR_ROLE(), liquidator);
         liquidationEngine.grantRole(liquidationEngine.ADMIN_ROLE(), admin);
         vm.stopPrank();
