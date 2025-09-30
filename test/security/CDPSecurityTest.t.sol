@@ -32,17 +32,15 @@ contract CDPSecurityTest is Test {
     
     function setUp() public {
         // Deploy contracts
-        stablecoin = new Stablecoin("TestStablecoin", "TST", admin);
-        collateralRegistry = new CollateralRegistry(admin);
+        stablecoin = new Stablecoin("TestStablecoin", "TST", 1000000000 * 10**18);
+        collateralRegistry = new CollateralRegistry();
         cdpManager = new CDPManager(
             address(stablecoin),
-            address(collateralRegistry),
-            admin
+            address(collateralRegistry)
         );
         liquidationEngine = new LiquidationEngine(
             address(cdpManager),
-            address(collateralRegistry),
-            admin
+            address(collateralRegistry)
         );
         collateralToken = new MockERC20("TestCollateral", "TCOL");
         
@@ -50,7 +48,7 @@ contract CDPSecurityTest is Test {
         vm.startPrank(admin);
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
-        collateralRegistry.grantRole(collateralRegistry.REGISTRAR_ROLE(), address(cdpManager));
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
         cdpManager.grantRole(cdpManager.ADMIN_ROLE(), admin);
         liquidationEngine.grantRole(liquidationEngine.LIQUIDATOR_ROLE(), liquidator);
         liquidationEngine.grantRole(liquidationEngine.ADMIN_ROLE(), admin);
