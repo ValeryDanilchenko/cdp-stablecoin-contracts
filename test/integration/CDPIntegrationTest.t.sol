@@ -66,7 +66,7 @@ contract CDPIntegrationTest is Test {
         collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
         cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         liquidationEngine.grantRole(liquidationEngine.LIQUIDATOR_ROLE(), liquidator);
-        liquidationEngine.grantRole(liquidationEngine.ADMIN_ROLE(), admin);
+        liquidationEngine.grantRole(liquidationEngine.DEFAULT_ADMIN_ROLE(), admin);
         vm.stopPrank();
         
         // Register collaterals
