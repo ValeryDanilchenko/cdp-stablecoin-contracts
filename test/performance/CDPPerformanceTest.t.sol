@@ -55,7 +55,7 @@ contract CDPPerformanceTest is Test {
         
         // Register collateral
         vm.startPrank(admin);
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken),
             LIQUIDATION_RATIO,
             LIQUIDATION_PENALTY,
@@ -256,7 +256,7 @@ contract CDPPerformanceTest is Test {
         // Benchmark collateral registration
         uint256 gasStart = gasleft();
         vm.startPrank(admin);
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(newToken),
             LIQUIDATION_RATIO,
             LIQUIDATION_PENALTY,
@@ -284,7 +284,7 @@ contract CDPPerformanceTest is Test {
         // Benchmark collateral unregistration
         gasStart = gasleft();
         vm.startPrank(admin);
-        collateralRegistry.unregisterCollateral(address(newToken));
+        collateralRegistry.unaddCollateral(address(newToken));
         vm.stopPrank();
         gasUsed = gasStart - gasleft();
         console.log("Collateral Unregistration Gas Used:", gasUsed);

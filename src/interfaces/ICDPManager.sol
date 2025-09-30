@@ -35,3 +35,4 @@ interface ICDPManager {
     function getCDPCount() external view returns (uint256);
     function isCDPLiquidatable(uint256 cdpId) external view returns (bool);
 }
+
