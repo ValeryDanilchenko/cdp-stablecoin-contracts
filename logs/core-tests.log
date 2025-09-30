@@ -1,0 +1,24 @@
+Compiler run failed:
+Error (6275): Source "src/core/PriceOracle.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
+ParserError: Source "src/core/PriceOracle.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
+ --> test/unit/oracle/PriceOracleTest.t.sol:5:1:
+  |
+5 | import {PriceOracle} from "../../../src/core/PriceOracle.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "src/mocks/MockPriceFeed.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
+ParserError: Source "src/mocks/MockPriceFeed.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
+ --> test/unit/oracle/PriceOracleTest.t.sol:6:1:
+  |
+6 | import {MockPriceFeed} from "../../../src/mocks/MockPriceFeed.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "src/interfaces/IPriceOracle.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
+ParserError: Source "src/interfaces/IPriceOracle.sol" not found: File not found. Searched the following locations: "/Users/valery/Projects/Pets/skill-demo-contracts".
+ --> test/unit/oracle/PriceOracleTest.t.sol:8:1:
+  |
+8 | import {IPriceOracle} from "../../../src/interfaces/IPriceOracle.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error: 
+Compilation failed
