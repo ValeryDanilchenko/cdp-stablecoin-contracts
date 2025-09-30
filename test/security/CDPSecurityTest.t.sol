@@ -56,7 +56,7 @@ contract CDPSecurityTest is Test {
         
         // Register collateral
         vm.startPrank(admin);
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken),
             LIQUIDATION_RATIO,
             LIQUIDATION_PENALTY,
@@ -199,7 +199,7 @@ contract CDPSecurityTest is Test {
         // Test with invalid liquidation ratio
         vm.startPrank(admin);
         vm.expectRevert();
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken),
             50, // Too low
             LIQUIDATION_PENALTY,
@@ -210,7 +210,7 @@ contract CDPSecurityTest is Test {
         // Test with invalid max liquidation ratio
         vm.startPrank(admin);
         vm.expectRevert();
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken),
             LIQUIDATION_RATIO,
             LIQUIDATION_PENALTY,
@@ -226,7 +226,7 @@ contract CDPSecurityTest is Test {
         // Test with invalid penalty
         vm.startPrank(admin);
         vm.expectRevert();
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken),
             LIQUIDATION_RATIO,
             100, // Too high
@@ -314,7 +314,7 @@ contract CDPSecurityTest is Test {
         // Attacker tries to register collateral
         vm.startPrank(attacker);
         vm.expectRevert();
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken),
             LIQUIDATION_RATIO,
             LIQUIDATION_PENALTY,
@@ -325,7 +325,7 @@ contract CDPSecurityTest is Test {
         // Attacker tries to unregister collateral
         vm.startPrank(attacker);
         vm.expectRevert();
-        collateralRegistry.unregisterCollateral(address(collateralToken));
+        collateralRegistry.unaddCollateral(address(collateralToken));
         vm.stopPrank();
     }
     

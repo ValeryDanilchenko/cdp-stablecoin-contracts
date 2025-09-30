@@ -80,23 +80,26 @@ contract CDPEndToEndTest is Test {
         
         // Register collaterals
         vm.startPrank(admin);
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(weth),
-            WETH_LIQUIDATION_RATIO,
-            WETH_LIQUIDATION_PENALTY,
-            WETH_MAX_LIQUIDATION_RATIO
+            WETH_LIQUIDATION_RATIO * 100, // Convert to basis points
+            200, // 2% stability fee
+            WETH_LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(wbtc),
-            WBTC_LIQUIDATION_RATIO,
-            WBTC_LIQUIDATION_PENALTY,
-            WBTC_MAX_LIQUIDATION_RATIO
+            WBTC_LIQUIDATION_RATIO * 100, // Convert to basis points
+            300, // 3% stability fee
+            WBTC_LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(usdc),
-            USDC_LIQUIDATION_RATIO,
-            USDC_LIQUIDATION_PENALTY,
-            USDC_MAX_LIQUIDATION_RATIO
+            USDC_LIQUIDATION_RATIO * 100, // Convert to basis points
+            100, // 1% stability fee
+            USDC_LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         

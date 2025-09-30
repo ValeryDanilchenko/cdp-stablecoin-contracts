@@ -71,13 +71,13 @@ contract CDPIntegrationTest is Test {
         
         // Register collaterals
         vm.startPrank(admin);
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken1),
             LIQUIDATION_RATIO_1,
             LIQUIDATION_PENALTY_1,
             MAX_LIQUIDATION_RATIO_1
         );
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken2),
             LIQUIDATION_RATIO_2,
             LIQUIDATION_PENALTY_2,

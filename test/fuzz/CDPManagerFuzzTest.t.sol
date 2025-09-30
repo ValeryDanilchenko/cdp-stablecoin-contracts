@@ -52,7 +52,7 @@ contract CDPManagerFuzzTest is Test {
         cdpManager.grantRole(cdpManager.ADMIN_ROLE(), admin);
         
         // Register collateral
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             address(collateralToken),
             LIQUIDATION_RATIO,
             LIQUIDATION_PENALTY,

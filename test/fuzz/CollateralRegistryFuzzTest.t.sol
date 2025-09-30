@@ -54,7 +54,7 @@ contract CollateralRegistryFuzzTest is Test {
         vm.assume(maxLiquidationRatio >= liquidationRatio && maxLiquidationRatio <= 2000); // Max 2000%
         
         vm.startPrank(registrar);
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             collateral,
             liquidationRatio,
             liquidationPenalty,
@@ -76,11 +76,11 @@ contract CollateralRegistryFuzzTest is Test {
         
         // First register the collateral
         vm.startPrank(registrar);
-        collateralRegistry.registerCollateral(collateral, 150, 10, 200);
+        collateralRegistry.addCollateral(collateral, 150, 10, 200);
         assertTrue(collateralRegistry.isCollateralRegistered(collateral));
         
         // Then unregister it
-        collateralRegistry.unregisterCollateral(collateral);
+        collateralRegistry.unaddCollateral(collateral);
         assertFalse(collateralRegistry.isCollateralRegistered(collateral));
         vm.stopPrank();
     }
@@ -101,7 +101,7 @@ contract CollateralRegistryFuzzTest is Test {
         
         // First register the collateral
         vm.startPrank(registrar);
-        collateralRegistry.registerCollateral(collateral, 150, 10, 200);
+        collateralRegistry.addCollateral(collateral, 150, 10, 200);
         
         // Update parameters
         collateralRegistry.updateCollateralParameters(
@@ -131,7 +131,7 @@ contract CollateralRegistryFuzzTest is Test {
             uint256 liquidationPenalty = i * 5; // Vary penalties
             uint256 maxLiquidationRatio = liquidationRatio + 100;
             
-            collateralRegistry.registerCollateral(
+            collateralRegistry.addCollateral(
                 collateral,
                 liquidationRatio,
                 liquidationPenalty,
@@ -160,7 +160,7 @@ contract CollateralRegistryFuzzTest is Test {
         vm.assume(maxLiquidationRatio == liquidationRatio); // Minimum max ratio
         
         vm.startPrank(registrar);
-        collateralRegistry.registerCollateral(
+        collateralRegistry.addCollateral(
             collateral,
             liquidationRatio,
             liquidationPenalty,
@@ -197,7 +197,7 @@ contract CollateralRegistryFuzzTest is Test {
         uint256 gasStart = gasleft();
         
         vm.startPrank(registrar);
-        collateralRegistry.registerCollateral(collateral, 150, 10, 200);
+        collateralRegistry.addCollateral(collateral, 150, 10, 200);
         vm.stopPrank();
         
         uint256 gasUsed = gasStart - gasleft();
@@ -226,7 +226,7 @@ contract CollateralRegistryFuzzTest is Test {
             vm.assume(liquidationPenalties[i] >= 0 && liquidationPenalties[i] <= 50);
             vm.assume(maxLiquidationRatios[i] >= liquidationRatios[i] && maxLiquidationRatios[i] <= 2000);
             
-            collateralRegistry.registerCollateral(
+            collateralRegistry.addCollateral(
                 collaterals[i],
                 liquidationRatios[i],
                 liquidationPenalties[i],
@@ -243,7 +243,7 @@ contract CollateralRegistryFuzzTest is Test {
         );
         
         // Unregister second collateral
-        collateralRegistry.unregisterCollateral(collaterals[1]);
+        collateralRegistry.unaddCollateral(collaterals[1]);
         
         vm.stopPrank();
         
@@ -267,7 +267,7 @@ contract CollateralRegistryFuzzTest is Test {
             uint256 liquidationPenalty = i % 51; // 0% to 50%
             uint256 maxLiquidationRatio = liquidationRatio + 100;
             
-            collateralRegistry.registerCollateral(
+            collateralRegistry.addCollateral(
                 collateral,
                 liquidationRatio,
                 liquidationPenalty,
