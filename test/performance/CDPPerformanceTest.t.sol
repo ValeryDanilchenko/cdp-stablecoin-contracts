@@ -132,7 +132,7 @@ contract CDPPerformanceTest is Test {
         
         // Benchmark liquidation check
         uint256 gasStart = gasleft();
-        bool isLiquidatable = liquidationEngine.isLiquidatable(cdpId);
+        bool isLiquidatable = liquidationEngine.isCDPLiquidatable(cdpId);
         uint256 gasUsed = gasStart - gasleft();
         console.log("Liquidation Check Gas Used:", gasUsed);
         assertLt(gasUsed, 50000); // Should be less than 50k gas
@@ -270,7 +270,7 @@ contract CDPPerformanceTest is Test {
         // Benchmark parameter update
         gasStart = gasleft();
         vm.startPrank(admin);
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             address(newToken),
             LIQUIDATION_RATIO + 50,
             LIQUIDATION_PENALTY + 5,

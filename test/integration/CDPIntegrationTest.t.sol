@@ -165,7 +165,7 @@ contract CDPIntegrationTest is Test {
         vm.stopPrank();
         
         // Verify CDP is liquidatable
-        assertTrue(liquidationEngine.isLiquidatable(cdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(cdpId));
         
         // Setup liquidator
         stablecoin.mint(liquidator, mintAmount);
@@ -207,10 +207,10 @@ contract CDPIntegrationTest is Test {
         assertTrue(cdpManager.getCDPDebt(cdpId2) > 0);
         
         // User1's CDP should not be liquidatable (conservative)
-        assertFalse(liquidationEngine.isLiquidatable(cdpId1));
+        assertFalse(liquidationEngine.isCDPLiquidatable(cdpId1));
         
         // User2's CDP should be liquidatable (aggressive)
-        assertTrue(liquidationEngine.isLiquidatable(cdpId2));
+        assertTrue(liquidationEngine.isCDPLiquidatable(cdpId2));
     }
     
     /**
@@ -228,7 +228,7 @@ contract CDPIntegrationTest is Test {
         
         // Update collateral parameters (increase liquidation ratio)
         vm.startPrank(admin);
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             address(collateralToken1),
             LIQUIDATION_RATIO_1 + 50, // Increase to 200%
             LIQUIDATION_PENALTY_1,
@@ -237,7 +237,7 @@ contract CDPIntegrationTest is Test {
         vm.stopPrank();
         
         // CDP should now be liquidatable due to parameter change
-        assertTrue(liquidationEngine.isLiquidatable(cdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(cdpId));
     }
     
     /**
@@ -255,7 +255,7 @@ contract CDPIntegrationTest is Test {
         
         // Simulate price drop by updating liquidation ratio
         vm.startPrank(admin);
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             address(collateralToken1),
             LIQUIDATION_RATIO_1 + 100, // Increase to 250%
             LIQUIDATION_PENALTY_1 + 5, // Increase penalty
@@ -264,7 +264,7 @@ contract CDPIntegrationTest is Test {
         vm.stopPrank();
         
         // CDP should be liquidatable
-        assertTrue(liquidationEngine.isLiquidatable(cdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(cdpId));
         
         // Setup liquidator
         stablecoin.mint(liquidator, mintAmount);

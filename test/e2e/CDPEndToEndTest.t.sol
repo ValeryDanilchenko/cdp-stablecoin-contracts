@@ -201,23 +201,23 @@ contract CDPEndToEndTest is Test {
         assertTrue(cdpManager.getCDPOwner(charlieCdpId) == charlie);
         
         // Alice's CDP should not be liquidatable (conservative)
-        assertFalse(liquidationEngine.isLiquidatable(aliceCdpId));
+        assertFalse(liquidationEngine.isCDPLiquidatable(aliceCdpId));
         
         // Bob's CDP should be liquidatable (aggressive)
-        assertTrue(liquidationEngine.isLiquidatable(bobCdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(bobCdpId));
         
         // Charlie's CDP should not be liquidatable (stable collateral)
-        assertFalse(liquidationEngine.isLiquidatable(charlieCdpId));
+        assertFalse(liquidationEngine.isCDPLiquidatable(charlieCdpId));
         
         // Simulate market crash by updating liquidation ratios
         vm.startPrank(admin);
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             address(weth),
             WETH_LIQUIDATION_RATIO + 50,
             WETH_LIQUIDATION_PENALTY + 2,
             WETH_MAX_LIQUIDATION_RATIO + 50
         );
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             address(wbtc),
             WBTC_LIQUIDATION_RATIO + 100,
             WBTC_LIQUIDATION_PENALTY + 5,
@@ -226,9 +226,9 @@ contract CDPEndToEndTest is Test {
         vm.stopPrank();
         
         // Now Alice's CDP should be liquidatable too
-        assertTrue(liquidationEngine.isLiquidatable(aliceCdpId));
-        assertTrue(liquidationEngine.isLiquidatable(bobCdpId));
-        assertFalse(liquidationEngine.isLiquidatable(charlieCdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(aliceCdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(bobCdpId));
+        assertFalse(liquidationEngine.isCDPLiquidatable(charlieCdpId));
     }
     
     /**
@@ -336,13 +336,13 @@ contract CDPEndToEndTest is Test {
         
         // Emergency: Update liquidation ratios significantly
         vm.startPrank(admin);
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             address(weth),
             WETH_LIQUIDATION_RATIO + 100, // Increase to 250%
             WETH_LIQUIDATION_PENALTY + 10, // Increase penalty
             WETH_MAX_LIQUIDATION_RATIO + 100
         );
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             address(wbtc),
             WBTC_LIQUIDATION_RATIO + 150, // Increase to 350%
             WBTC_LIQUIDATION_PENALTY + 15, // Increase penalty
@@ -351,8 +351,8 @@ contract CDPEndToEndTest is Test {
         vm.stopPrank();
         
         // Both CDPs should now be liquidatable
-        assertTrue(liquidationEngine.isLiquidatable(aliceCdpId));
-        assertTrue(liquidationEngine.isLiquidatable(bobCdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(aliceCdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(bobCdpId));
         
         // Setup liquidators
         stablecoin.mint(liquidator, 20000 * 10**18);
@@ -383,7 +383,7 @@ contract CDPEndToEndTest is Test {
         
         // Simulate market crash
         vm.startPrank(admin);
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             address(weth),
             WETH_LIQUIDATION_RATIO + 200, // Increase to 350%
             WETH_LIQUIDATION_PENALTY + 20, // Increase penalty
@@ -392,7 +392,7 @@ contract CDPEndToEndTest is Test {
         vm.stopPrank();
         
         // CDP should be liquidatable
-        assertTrue(liquidationEngine.isLiquidatable(cdpId));
+        assertTrue(liquidationEngine.isCDPLiquidatable(cdpId));
         
         // Setup liquidator
         stablecoin.mint(liquidator, 6000 * 10**18);

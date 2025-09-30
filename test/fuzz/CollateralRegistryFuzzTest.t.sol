@@ -104,7 +104,7 @@ contract CollateralRegistryFuzzTest is Test {
         collateralRegistry.addCollateral(collateral, 150, 10, 200);
         
         // Update parameters
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             collateral,
             newLiquidationRatio,
             newLiquidationPenalty,
@@ -235,7 +235,7 @@ contract CollateralRegistryFuzzTest is Test {
         }
         
         // Update parameters for first collateral
-        collateralRegistry.updateCollateralParameters(
+        collateralRegistry.updateCollateralParams(
             collaterals[0],
             liquidationRatios[0] + 50,
             liquidationPenalties[0] + 5,
@@ -276,7 +276,7 @@ contract CollateralRegistryFuzzTest is Test {
             
             // Every 5th operation, update parameters
             if (i % 5 == 0 && i > 0) {
-                collateralRegistry.updateCollateralParameters(
+                collateralRegistry.updateCollateralParams(
                     collateral,
                     liquidationRatio + 25,
                     liquidationPenalty + 2,
