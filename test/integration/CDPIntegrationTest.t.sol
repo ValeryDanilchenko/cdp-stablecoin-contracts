@@ -232,9 +232,9 @@ contract CDPIntegrationTest is Test {
         vm.startPrank(admin);
         collateralRegistry.updateCollateralParams(
             address(collateralToken1),
-            LIQUIDATION_RATIO_1 + 50, // Increase to 200%
-            LIQUIDATION_PENALTY_1,
-            MAX_LIQUIDATION_RATIO_1 + 50
+            (LIQUIDATION_RATIO_1 + 50) * 100, // Increase to 200% in basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY_1 * 100 // Convert to basis points
         );
         vm.stopPrank();
         
@@ -259,9 +259,9 @@ contract CDPIntegrationTest is Test {
         vm.startPrank(admin);
         collateralRegistry.updateCollateralParams(
             address(collateralToken1),
-            LIQUIDATION_RATIO_1 + 100, // Increase to 250%
-            LIQUIDATION_PENALTY_1 + 5, // Increase penalty
-            MAX_LIQUIDATION_RATIO_1 + 100
+            (LIQUIDATION_RATIO_1 + 100) * 100, // Increase to 250% in basis points
+            200, // 2% stability fee
+            (LIQUIDATION_PENALTY_1 + 5) * 100 // Increase penalty in basis points
         );
         vm.stopPrank();
         
