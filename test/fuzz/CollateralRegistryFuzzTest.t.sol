@@ -49,22 +49,22 @@ contract CollateralRegistryFuzzTest is Test {
         uint256 maxLiquidationRatio
     ) public {
         vm.assume(collateral != address(0));
-        vm.assume(liquidationRatio >= 100 && liquidationRatio <= 1000); // 100% to 1000%
-        vm.assume(liquidationPenalty >= 0 && liquidationPenalty <= 50); // 0% to 50%
-        vm.assume(maxLiquidationRatio >= liquidationRatio && maxLiquidationRatio <= 2000); // Max 2000%
+        vm.assume(liquidationRatio >= 10000 && liquidationRatio <= 50000); // 100% to 500% in basis points
+        vm.assume(liquidationPenalty >= 0 && liquidationPenalty <= 5000); // 0% to 50% in basis points
+        vm.assume(maxLiquidationRatio >= liquidationRatio && maxLiquidationRatio <= 100000); // Max 1000% in basis points
         
         vm.startPrank(registrar);
         collateralRegistry.addCollateral(
             collateral,
-            liquidationRatio * 100, // Convert to basis points
+            liquidationRatio, // Already in basis points
             200, // 2% stability fee
-            liquidationPenalty * 100, // Convert to basis points
+            liquidationPenalty, // Already in basis points
             1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         
         assertTrue(collateralRegistry.isCollateralActive(collateral));
-        assertEq(collateralRegistry.getLiquidationRatio(collateral), liquidationRatio * 100);
+        assertEq(collateralRegistry.getLiquidationRatio(collateral), liquidationRatio);
         assertEq(collateralRegistry.getStabilityFee(collateral), 200);
         assertEq(collateralRegistry.getDebtCeiling(collateral), 1000000 * 10**18);
     }
@@ -96,9 +96,9 @@ contract CollateralRegistryFuzzTest is Test {
         uint256 newMaxLiquidationRatio
     ) public {
         vm.assume(collateral != address(0));
-        vm.assume(newLiquidationRatio >= 100 && newLiquidationRatio <= 1000);
-        vm.assume(newLiquidationPenalty >= 0 && newLiquidationPenalty <= 50);
-        vm.assume(newMaxLiquidationRatio >= newLiquidationRatio && newMaxLiquidationRatio <= 2000);
+        vm.assume(newLiquidationRatio >= 10000 && newLiquidationRatio <= 50000);
+        vm.assume(newLiquidationPenalty >= 0 && newLiquidationPenalty <= 5000);
+        vm.assume(newMaxLiquidationRatio >= newLiquidationRatio && newMaxLiquidationRatio <= 100000);
         
         // First register the collateral
         vm.startPrank(registrar);
@@ -107,13 +107,13 @@ contract CollateralRegistryFuzzTest is Test {
         // Update parameters
         collateralRegistry.updateCollateralParams(
             collateral,
-            newLiquidationRatio * 100, // Convert to basis points
+            newLiquidationRatio, // Already in basis points
             200, // 2% stability fee
-            newLiquidationPenalty * 100 // Convert to basis points
+            newLiquidationPenalty // Already in basis points
         );
         vm.stopPrank();
         
-        assertEq(collateralRegistry.getLiquidationRatio(collateral), newLiquidationRatio * 100);
+        assertEq(collateralRegistry.getLiquidationRatio(collateral), newLiquidationRatio);
         assertEq(collateralRegistry.getStabilityFee(collateral), 200);
         assertEq(collateralRegistry.getDebtCeiling(collateral), 1000000 * 10**18);
     }
@@ -157,16 +157,16 @@ contract CollateralRegistryFuzzTest is Test {
         address collateral = makeAddr("collateral");
         
         // Test minimum values
-        vm.assume(liquidationRatio == 100); // Minimum 100%
+        vm.assume(liquidationRatio == 10000); // Minimum 100% in basis points
         vm.assume(liquidationPenalty == 0); // Minimum 0%
         vm.assume(maxLiquidationRatio == liquidationRatio); // Minimum max ratio
         
         vm.startPrank(registrar);
         collateralRegistry.addCollateral(
             collateral,
-            liquidationRatio * 100, // Convert to basis points
+            liquidationRatio, // Already in basis points
             200, // 2% stability fee
-            liquidationPenalty * 100, // Convert to basis points
+            liquidationPenalty, // Already in basis points
             1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
@@ -225,15 +225,15 @@ contract CollateralRegistryFuzzTest is Test {
         
         // Register all collaterals
         for (uint256 i = 0; i < 3; i++) {
-            vm.assume(liquidationRatios[i] >= 100 && liquidationRatios[i] <= 1000);
-            vm.assume(liquidationPenalties[i] >= 0 && liquidationPenalties[i] <= 50);
-            vm.assume(maxLiquidationRatios[i] >= liquidationRatios[i] && maxLiquidationRatios[i] <= 2000);
+            vm.assume(liquidationRatios[i] >= 10000 && liquidationRatios[i] <= 50000);
+            vm.assume(liquidationPenalties[i] >= 0 && liquidationPenalties[i] <= 5000);
+            vm.assume(maxLiquidationRatios[i] >= liquidationRatios[i] && maxLiquidationRatios[i] <= 100000);
             
             collateralRegistry.addCollateral(
                 collaterals[i],
-                liquidationRatios[i] * 100, // Convert to basis points
+                liquidationRatios[i], // Already in basis points
                 200, // 2% stability fee
-                liquidationPenalties[i] * 100, // Convert to basis points
+                liquidationPenalties[i], // Already in basis points
                 1000000 * 10**18 // 1M debt ceiling
             );
         }
@@ -241,9 +241,9 @@ contract CollateralRegistryFuzzTest is Test {
         // Update parameters for first collateral
             collateralRegistry.updateCollateralParams(
                 collaterals[0],
-                (liquidationRatios[0] + 50) * 100, // Convert to basis points
+                liquidationRatios[0] + 5000, // Add 50% in basis points
                 200, // 2% stability fee
-                (liquidationPenalties[0] + 5) * 100 // Convert to basis points
+                liquidationPenalties[0] + 500 // Add 5% in basis points
             );
         
         // Unregister second collateral
@@ -283,9 +283,9 @@ contract CollateralRegistryFuzzTest is Test {
             if (i % 5 == 0 && i > 0) {
                 collateralRegistry.updateCollateralParams(
                     collateral,
-                    (liquidationRatio + 25) * 100, // Convert to basis points
+                    liquidationRatio + 2500, // Add 25% in basis points
                     200, // 2% stability fee
-                    (liquidationPenalty + 2) * 100 // Convert to basis points
+                    liquidationPenalty + 200 // Add 2% in basis points
                 );
             }
         }
