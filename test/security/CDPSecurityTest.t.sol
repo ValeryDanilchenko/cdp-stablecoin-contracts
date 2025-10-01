@@ -149,7 +149,7 @@ contract CDPSecurityTest is Test {
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), maxAmount);
         
         // This should not overflow
-        uint256 maxMintable = (maxAmount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (maxAmount * 10000) / (LIQUIDATION_RATIO * 100);
         if (maxMintable > 0) {
             cdpManager.mintStablecoin(cdpId, maxMintable);
         }
@@ -183,7 +183,7 @@ contract CDPSecurityTest is Test {
      */
     function test_IntegerDivisionPrecision_Calculations() public {
         uint256 collateralAmount = 1001; // Odd number to test precision
-        uint256 expectedMintable = (collateralAmount * 100) / LIQUIDATION_RATIO;
+        uint256 expectedMintable = (collateralAmount * 10000) / (LIQUIDATION_RATIO * 100);
         
         vm.startPrank(user);
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), collateralAmount);
@@ -362,7 +362,7 @@ contract CDPSecurityTest is Test {
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), largeAmount);
         
         // This should not exceed gas limit
-        uint256 maxMintable = (largeAmount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (largeAmount * 10000) / (LIQUIDATION_RATIO * 100);
         if (maxMintable > 0) {
             cdpManager.mintStablecoin(cdpId, maxMintable);
         }
@@ -398,7 +398,7 @@ contract CDPSecurityTest is Test {
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), maxAmount);
         
         // Calculate max mintable amount
-        uint256 maxMintable = (maxAmount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (maxAmount * 10000) / (LIQUIDATION_RATIO * 100);
         if (maxMintable > 0 && maxMintable <= maxAmount) {
             cdpManager.mintStablecoin(cdpId, maxMintable);
         }

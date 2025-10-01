@@ -95,7 +95,7 @@ contract CDPManagerFuzzTest is Test {
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), collateralAmount);
         
         // Calculate max mintable amount (collateral * 100 / liquidation ratio)
-        uint256 maxMintable = (collateralAmount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (collateralAmount * 10000) / (LIQUIDATION_RATIO * 100);
         vm.assume(mintAmount <= maxMintable);
         
         // Mint stablecoin
@@ -117,7 +117,7 @@ contract CDPManagerFuzzTest is Test {
         vm.startPrank(user);
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), collateralAmount);
         
-        uint256 maxMintable = (collateralAmount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (collateralAmount * 10000) / (LIQUIDATION_RATIO * 100);
         vm.assume(mintAmount <= maxMintable);
         
         cdpManager.mintStablecoin(cdpId, mintAmount);
@@ -146,7 +146,7 @@ contract CDPManagerFuzzTest is Test {
         vm.startPrank(user);
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), collateralAmount);
         
-        uint256 maxMintable = (collateralAmount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (collateralAmount * 10000) / (LIQUIDATION_RATIO * 100);
         vm.assume(mintAmount <= maxMintable);
         
         cdpManager.mintStablecoin(cdpId, mintAmount);
@@ -154,7 +154,7 @@ contract CDPManagerFuzzTest is Test {
         // Calculate max withdrawable amount
         uint256 remainingCollateral = collateralAmount;
         uint256 remainingDebt = mintAmount;
-        uint256 requiredCollateral = (remainingDebt * LIQUIDATION_RATIO) / 100;
+        uint256 requiredCollateral = (remainingDebt * LIQUIDATION_RATIO * 100) / 10000;
         uint256 maxWithdrawable = remainingCollateral - requiredCollateral;
         
         vm.assume(withdrawAmount > 0 && withdrawAmount <= maxWithdrawable);
@@ -199,7 +199,7 @@ contract CDPManagerFuzzTest is Test {
         // Withdraw some collateral
         uint256 totalCollateral = initialCollateral + additionalCollateral;
         uint256 remainingDebt = mintAmount - repayAmount;
-        uint256 requiredCollateral = (remainingDebt * LIQUIDATION_RATIO) / 100;
+        uint256 requiredCollateral = (remainingDebt * LIQUIDATION_RATIO * 100) / 10000;
         uint256 maxWithdrawable = totalCollateral - requiredCollateral;
         
         vm.assume(withdrawAmount > 0 && withdrawAmount <= maxWithdrawable);
@@ -222,7 +222,7 @@ contract CDPManagerFuzzTest is Test {
         
         // Test maximum mintable amount
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), amount);
-        uint256 maxMintable = (amount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (amount * 10000) / (LIQUIDATION_RATIO * 100);
         
         if (maxMintable > 0) {
             cdpManager.mintStablecoin(cdpId, maxMintable);
