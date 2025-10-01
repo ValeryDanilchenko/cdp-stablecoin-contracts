@@ -192,7 +192,7 @@ contract CDPPerformanceTest is Test {
         uint256 gasStart = gasleft();
         vm.startPrank(user);
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), largeAmount);
-        uint256 maxMintable = (largeAmount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (largeAmount * 10000) / (LIQUIDATION_RATIO * 100);
         cdpManager.mintStablecoin(cdpId, maxMintable);
         vm.stopPrank();
         uint256 gasUsed = gasStart - gasleft();
@@ -237,7 +237,7 @@ contract CDPPerformanceTest is Test {
             uint256 gasStart = gasleft();
             vm.startPrank(user);
             uint256 cdpId = cdpManager.openCDP(address(collateralToken), amounts[i]);
-            uint256 maxMintable = (amounts[i] * 100) / LIQUIDATION_RATIO;
+            uint256 maxMintable = (amounts[i] * 10000) / (LIQUIDATION_RATIO * 100);
             if (maxMintable > 0) {
                 cdpManager.mintStablecoin(cdpId, maxMintable);
             }
@@ -382,7 +382,7 @@ contract CDPPerformanceTest is Test {
         uint256 gasStart = gasleft();
         vm.startPrank(user);
         uint256 cdpId = cdpManager.openCDP(address(collateralToken), maxAmount);
-        uint256 maxMintable = (maxAmount * 100) / LIQUIDATION_RATIO;
+        uint256 maxMintable = (maxAmount * 10000) / (LIQUIDATION_RATIO * 100);
         if (maxMintable > 0 && maxMintable <= maxAmount) {
             cdpManager.mintStablecoin(cdpId, maxMintable);
         }

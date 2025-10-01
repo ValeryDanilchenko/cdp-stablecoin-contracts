@@ -123,8 +123,8 @@ contract CDPIntegrationTest is Test {
         assertTrue(cdpId2 > 0);
         
         // Mint stablecoins from both CDPs
-        uint256 maxMintable1 = (collateralAmount1 * 100) / LIQUIDATION_RATIO_1;
-        uint256 maxMintable2 = (collateralAmount2 * 100) / LIQUIDATION_RATIO_2;
+        uint256 maxMintable1 = (collateralAmount1 * 10000) / (LIQUIDATION_RATIO_1 * 100);
+        uint256 maxMintable2 = (collateralAmount2 * 10000) / (LIQUIDATION_RATIO_2 * 100);
         uint256 mintAmount1 = maxMintable1 / 2;
         uint256 mintAmount2 = maxMintable2 / 2;
         
