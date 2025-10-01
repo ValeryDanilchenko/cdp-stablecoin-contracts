@@ -13,7 +13,7 @@ import {MockERC20} from "../../src/mocks/MockERC20.sol";
 contract CollateralRegistryFuzzTest is Test {
     CollateralRegistry public collateralRegistry;
     
-    address public admin = makeAddr("admin");
+    address public admin = address(this);
     address public registrar = makeAddr("registrar");
     
     event CollateralRegistered(
@@ -182,12 +182,12 @@ contract CollateralRegistryFuzzTest is Test {
         
         // Grant registrar role
         vm.startPrank(admin);
-        collateralRegistry.grantRole(collateralRegistry.REGISTRAR_ROLE(), account);
-        assertTrue(collateralRegistry.hasRole(collateralRegistry.REGISTRAR_ROLE(), account));
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), account);
+        assertTrue(collateralRegistry.hasRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), account));
         
         // Revoke registrar role
-        collateralRegistry.revokeRole(collateralRegistry.REGISTRAR_ROLE(), account);
-        assertFalse(collateralRegistry.hasRole(collateralRegistry.REGISTRAR_ROLE(), account));
+        collateralRegistry.revokeRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), account);
+        assertFalse(collateralRegistry.hasRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), account));
         vm.stopPrank();
     }
     
@@ -231,9 +231,10 @@ contract CollateralRegistryFuzzTest is Test {
             
             collateralRegistry.addCollateral(
                 collaterals[i],
-                liquidationRatios[i],
-                liquidationPenalties[i],
-                maxLiquidationRatios[i]
+                liquidationRatios[i] * 100, // Convert to basis points
+                200, // 2% stability fee
+                liquidationPenalties[i] * 100, // Convert to basis points
+                1000000 * 10**18 // 1M debt ceiling
             );
         }
         

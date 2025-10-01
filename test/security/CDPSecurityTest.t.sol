@@ -20,7 +20,7 @@ contract CDPSecurityTest is Test {
     LiquidationEngine public liquidationEngine;
     MockERC20 public collateralToken;
     
-    address public admin = makeAddr("admin");
+    address public admin = address(this);
     address public attacker = makeAddr("attacker");
     address public user = makeAddr("user");
     address public liquidator = makeAddr("liquidator");
@@ -48,7 +48,7 @@ contract CDPSecurityTest is Test {
         vm.startPrank(admin);
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
-        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), admin);
         cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         liquidationEngine.grantRole(liquidationEngine.LIQUIDATOR_ROLE(), liquidator);
         liquidationEngine.grantRole(liquidationEngine.DEFAULT_ADMIN_ROLE(), admin);
@@ -301,13 +301,13 @@ contract CDPSecurityTest is Test {
         // Attacker tries to grant roles
         vm.startPrank(attacker);
         vm.expectRevert();
-        cdpManager.grantRole(cdpManager.ADMIN_ROLE(), attacker);
+        cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), attacker);
         vm.stopPrank();
         
         // Attacker tries to revoke roles
         vm.startPrank(attacker);
         vm.expectRevert();
-        cdpManager.revokeRole(cdpManager.ADMIN_ROLE(), admin);
+        cdpManager.revokeRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         vm.stopPrank();
     }
     

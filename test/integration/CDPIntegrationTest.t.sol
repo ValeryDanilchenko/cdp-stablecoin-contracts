@@ -21,7 +21,7 @@ contract CDPIntegrationTest is Test {
     MockERC20 public collateralToken1;
     MockERC20 public collateralToken2;
     
-    address public admin = makeAddr("admin");
+    address public admin = address(this);
     address public liquidator = makeAddr("liquidator");
     address public user1 = makeAddr("user1");
     address public user2 = makeAddr("user2");
@@ -63,7 +63,7 @@ contract CDPIntegrationTest is Test {
         vm.startPrank(admin);
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
-        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), admin);
         cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         liquidationEngine.grantRole(liquidationEngine.LIQUIDATOR_ROLE(), liquidator);
         liquidationEngine.grantRole(liquidationEngine.DEFAULT_ADMIN_ROLE(), admin);
@@ -73,15 +73,17 @@ contract CDPIntegrationTest is Test {
         vm.startPrank(admin);
         collateralRegistry.addCollateral(
             address(collateralToken1),
-            LIQUIDATION_RATIO_1,
-            LIQUIDATION_PENALTY_1,
-            MAX_LIQUIDATION_RATIO_1
+            LIQUIDATION_RATIO_1 * 100, // Convert to basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY_1 * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         collateralRegistry.addCollateral(
             address(collateralToken2),
-            LIQUIDATION_RATIO_2,
-            LIQUIDATION_PENALTY_2,
-            MAX_LIQUIDATION_RATIO_2
+            LIQUIDATION_RATIO_2 * 100, // Convert to basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY_2 * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         

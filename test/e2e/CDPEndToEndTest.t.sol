@@ -22,7 +22,7 @@ contract CDPEndToEndTest is Test {
     MockERC20 public wbtc;
     MockERC20 public usdc;
     
-    address public admin = makeAddr("admin");
+    address public admin = address(this);
     address public liquidator = makeAddr("liquidator");
     address public alice = makeAddr("alice");
     address public bob = makeAddr("bob");
@@ -72,7 +72,7 @@ contract CDPEndToEndTest is Test {
         vm.startPrank(admin);
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
-        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), admin);
         cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         liquidationEngine.grantRole(liquidationEngine.LIQUIDATOR_ROLE(), liquidator);
         liquidationEngine.grantRole(liquidationEngine.DEFAULT_ADMIN_ROLE(), admin);

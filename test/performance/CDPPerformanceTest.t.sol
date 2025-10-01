@@ -20,7 +20,7 @@ contract CDPPerformanceTest is Test {
     LiquidationEngine public liquidationEngine;
     MockERC20 public collateralToken;
     
-    address public admin = makeAddr("admin");
+    address public admin = address(this);
     address public user = makeAddr("user");
     address public liquidator = makeAddr("liquidator");
     
@@ -47,7 +47,7 @@ contract CDPPerformanceTest is Test {
         vm.startPrank(admin);
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
-        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), admin);
         cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         liquidationEngine.grantRole(liquidationEngine.LIQUIDATOR_ROLE(), liquidator);
         liquidationEngine.grantRole(liquidationEngine.DEFAULT_ADMIN_ROLE(), admin);
@@ -334,7 +334,7 @@ contract CDPPerformanceTest is Test {
         // Benchmark role granting
         uint256 gasStart = gasleft();
         vm.startPrank(admin);
-        cdpManager.grantRole(cdpManager.ADMIN_ROLE(), newAdmin);
+        cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), newAdmin);
         vm.stopPrank();
         uint256 gasUsed = gasStart - gasleft();
         console.log("Role Granting Gas Used:", gasUsed);
@@ -343,7 +343,7 @@ contract CDPPerformanceTest is Test {
         // Benchmark role revoking
         gasStart = gasleft();
         vm.startPrank(admin);
-        cdpManager.revokeRole(cdpManager.ADMIN_ROLE(), newAdmin);
+        cdpManager.revokeRole(cdpManager.DEFAULT_ADMIN_ROLE(), newAdmin);
         vm.stopPrank();
         gasUsed = gasStart - gasleft();
         console.log("Role Revoking Gas Used:", gasUsed);
