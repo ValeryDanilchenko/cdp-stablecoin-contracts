@@ -35,12 +35,11 @@ contract CDPManagerFuzzTest is Test {
     
     function setUp() public {
         // Deploy contracts
-        stablecoin = new Stablecoin("TestStablecoin", "TST", admin);
-        collateralRegistry = new CollateralRegistry(admin);
+        stablecoin = new Stablecoin("TestStablecoin", "TST", 1000000000 * 10**18);
+        collateralRegistry = new CollateralRegistry();
         cdpManager = new CDPManager(
             address(stablecoin),
-            address(collateralRegistry),
-            admin
+            address(collateralRegistry)
         );
         collateralToken = new MockERC20("TestCollateral", "TCOL");
         
@@ -48,15 +47,16 @@ contract CDPManagerFuzzTest is Test {
         vm.startPrank(admin);
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
-        collateralRegistry.grantRole(collateralRegistry.REGISTRAR_ROLE(), address(cdpManager));
-        cdpManager.grantRole(cdpManager.ADMIN_ROLE(), admin);
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
+        cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         
         // Register collateral
         collateralRegistry.addCollateral(
             address(collateralToken),
-            LIQUIDATION_RATIO,
-            LIQUIDATION_PENALTY,
-            MAX_LIQUIDATION_RATIO
+            LIQUIDATION_RATIO * 100, // Convert to basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         

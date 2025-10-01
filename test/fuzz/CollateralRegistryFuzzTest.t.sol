@@ -31,11 +31,11 @@ contract CollateralRegistryFuzzTest is Test {
     );
     
     function setUp() public {
-        collateralRegistry = new CollateralRegistry(admin);
+        collateralRegistry = new CollateralRegistry();
         
         // Setup roles
         vm.startPrank(admin);
-        collateralRegistry.grantRole(collateralRegistry.REGISTRAR_ROLE(), registrar);
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), registrar);
         vm.stopPrank();
     }
     
@@ -56,16 +56,17 @@ contract CollateralRegistryFuzzTest is Test {
         vm.startPrank(registrar);
         collateralRegistry.addCollateral(
             collateral,
-            liquidationRatio,
-            liquidationPenalty,
-            maxLiquidationRatio
+            liquidationRatio * 100, // Convert to basis points
+            200, // 2% stability fee
+            liquidationPenalty * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         
-        assertTrue(collateralRegistry.isCollateralRegistered(collateral));
-        assertEq(collateralRegistry.getLiquidationRatio(collateral), liquidationRatio);
-        assertEq(collateralRegistry.getLiquidationPenalty(collateral), liquidationPenalty);
-        assertEq(collateralRegistry.getMaxLiquidationRatio(collateral), maxLiquidationRatio);
+        assertTrue(collateralRegistry.isCollateralActive(collateral));
+        assertEq(collateralRegistry.getLiquidationRatio(collateral), liquidationRatio * 100);
+        assertEq(collateralRegistry.getStabilityFee(collateral), 200);
+        assertEq(collateralRegistry.getDebtCeiling(collateral), 1000000 * 10**18);
     }
     
     /**
@@ -76,12 +77,12 @@ contract CollateralRegistryFuzzTest is Test {
         
         // First register the collateral
         vm.startPrank(registrar);
-        collateralRegistry.addCollateral(collateral, 150, 10, 200);
-        assertTrue(collateralRegistry.isCollateralRegistered(collateral));
+        collateralRegistry.addCollateral(collateral, 15000, 200, 1000, 1000000 * 10**18);
+        assertTrue(collateralRegistry.isCollateralActive(collateral));
         
         // Then unregister it
-        collateralRegistry.unaddCollateral(collateral);
-        assertFalse(collateralRegistry.isCollateralRegistered(collateral));
+        collateralRegistry.removeCollateral(collateral);
+        assertFalse(collateralRegistry.isCollateralActive(collateral));
         vm.stopPrank();
     }
     
@@ -101,20 +102,20 @@ contract CollateralRegistryFuzzTest is Test {
         
         // First register the collateral
         vm.startPrank(registrar);
-        collateralRegistry.addCollateral(collateral, 150, 10, 200);
+        collateralRegistry.addCollateral(collateral, 15000, 200, 1000, 1000000 * 10**18);
         
         // Update parameters
         collateralRegistry.updateCollateralParams(
             collateral,
-            newLiquidationRatio,
-            newLiquidationPenalty,
-            newMaxLiquidationRatio
+            newLiquidationRatio * 100, // Convert to basis points
+            200, // 2% stability fee
+            newLiquidationPenalty * 100 // Convert to basis points
         );
         vm.stopPrank();
         
-        assertEq(collateralRegistry.getLiquidationRatio(collateral), newLiquidationRatio);
-        assertEq(collateralRegistry.getLiquidationPenalty(collateral), newLiquidationPenalty);
-        assertEq(collateralRegistry.getMaxLiquidationRatio(collateral), newMaxLiquidationRatio);
+        assertEq(collateralRegistry.getLiquidationRatio(collateral), newLiquidationRatio * 100);
+        assertEq(collateralRegistry.getStabilityFee(collateral), 200);
+        assertEq(collateralRegistry.getDebtCeiling(collateral), 1000000 * 10**18);
     }
     
     /**
@@ -133,12 +134,13 @@ contract CollateralRegistryFuzzTest is Test {
             
             collateralRegistry.addCollateral(
                 collateral,
-                liquidationRatio,
-                liquidationPenalty,
-                maxLiquidationRatio
+                liquidationRatio * 100, // Convert to basis points
+                200, // 2% stability fee
+                liquidationPenalty * 100, // Convert to basis points
+                1000000 * 10**18 // 1M debt ceiling
             );
             
-            assertTrue(collateralRegistry.isCollateralRegistered(collateral));
+            assertTrue(collateralRegistry.isCollateralActive(collateral));
         }
         
         vm.stopPrank();
@@ -162,13 +164,14 @@ contract CollateralRegistryFuzzTest is Test {
         vm.startPrank(registrar);
         collateralRegistry.addCollateral(
             collateral,
-            liquidationRatio,
-            liquidationPenalty,
-            maxLiquidationRatio
+            liquidationRatio * 100, // Convert to basis points
+            200, // 2% stability fee
+            liquidationPenalty * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         
-        assertTrue(collateralRegistry.isCollateralRegistered(collateral));
+        assertTrue(collateralRegistry.isCollateralActive(collateral));
     }
     
     /**
@@ -197,7 +200,7 @@ contract CollateralRegistryFuzzTest is Test {
         uint256 gasStart = gasleft();
         
         vm.startPrank(registrar);
-        collateralRegistry.addCollateral(collateral, 150, 10, 200);
+        collateralRegistry.addCollateral(collateral, 15000, 200, 1000, 1000000 * 10**18);
         vm.stopPrank();
         
         uint256 gasUsed = gasStart - gasleft();
@@ -235,22 +238,22 @@ contract CollateralRegistryFuzzTest is Test {
         }
         
         // Update parameters for first collateral
-        collateralRegistry.updateCollateralParams(
-            collaterals[0],
-            liquidationRatios[0] + 50,
-            liquidationPenalties[0] + 5,
-            maxLiquidationRatios[0] + 100
-        );
+            collateralRegistry.updateCollateralParams(
+                collaterals[0],
+                (liquidationRatios[0] + 50) * 100, // Convert to basis points
+                200, // 2% stability fee
+                (liquidationPenalties[0] + 5) * 100 // Convert to basis points
+            );
         
         // Unregister second collateral
-        collateralRegistry.unaddCollateral(collaterals[1]);
+        collateralRegistry.removeCollateral(collaterals[1]);
         
         vm.stopPrank();
         
         // Verify final state
-        assertTrue(collateralRegistry.isCollateralRegistered(collaterals[0]));
-        assertFalse(collateralRegistry.isCollateralRegistered(collaterals[1]));
-        assertTrue(collateralRegistry.isCollateralRegistered(collaterals[2]));
+        assertTrue(collateralRegistry.isCollateralActive(collaterals[0]));
+        assertFalse(collateralRegistry.isCollateralActive(collaterals[1]));
+        assertTrue(collateralRegistry.isCollateralActive(collaterals[2]));
     }
     
     /**
@@ -269,18 +272,19 @@ contract CollateralRegistryFuzzTest is Test {
             
             collateralRegistry.addCollateral(
                 collateral,
-                liquidationRatio,
-                liquidationPenalty,
-                maxLiquidationRatio
+                liquidationRatio * 100, // Convert to basis points
+                200, // 2% stability fee
+                liquidationPenalty * 100, // Convert to basis points
+                1000000 * 10**18 // 1M debt ceiling
             );
             
             // Every 5th operation, update parameters
             if (i % 5 == 0 && i > 0) {
                 collateralRegistry.updateCollateralParams(
                     collateral,
-                    liquidationRatio + 25,
-                    liquidationPenalty + 2,
-                    maxLiquidationRatio + 50
+                    (liquidationRatio + 25) * 100, // Convert to basis points
+                    200, // 2% stability fee
+                    (liquidationPenalty + 2) * 100 // Convert to basis points
                 );
             }
         }
@@ -290,7 +294,7 @@ contract CollateralRegistryFuzzTest is Test {
         // Verify all collaterals are registered
         for (uint256 i = 0; i < operations; i++) {
             address collateral = address(uint160(i + 1));
-            assertTrue(collateralRegistry.isCollateralRegistered(collateral));
+            assertTrue(collateralRegistry.isCollateralActive(collateral));
         }
     }
 }
