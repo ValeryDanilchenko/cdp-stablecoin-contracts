@@ -39,7 +39,7 @@ contract StablecoinFuzzTest is Test {
      * @dev Fuzz test for minting with various amounts
      */
     function testFuzz_Mint_VariousAmounts(uint256 amount) public {
-        vm.assume(amount > 0 && amount <= type(uint128).max);
+        vm.assume(amount > 0 && amount <= stablecoin.maxSupply());
         
         uint256 initialBalance = stablecoin.balanceOf(user1);
         uint256 initialTotalSupply = stablecoin.totalSupply();
@@ -56,7 +56,7 @@ contract StablecoinFuzzTest is Test {
      * @dev Fuzz test for burning with various amounts
      */
     function testFuzz_Burn_VariousAmounts(uint256 mintAmount, uint256 burnAmount) public {
-        vm.assume(mintAmount > 0 && mintAmount <= type(uint128).max);
+        vm.assume(mintAmount > 0 && mintAmount <= stablecoin.maxSupply());
         vm.assume(burnAmount > 0 && burnAmount <= mintAmount);
         
         // First mint some tokens
@@ -80,7 +80,7 @@ contract StablecoinFuzzTest is Test {
      * @dev Fuzz test for transfers with various amounts
      */
     function testFuzz_Transfer_VariousAmounts(uint256 mintAmount, uint256 transferAmount) public {
-        vm.assume(mintAmount > 0 && mintAmount <= type(uint128).max);
+        vm.assume(mintAmount > 0 && mintAmount <= stablecoin.maxSupply());
         vm.assume(transferAmount > 0 && transferAmount <= mintAmount);
         
         // Mint tokens to user1
@@ -104,8 +104,8 @@ contract StablecoinFuzzTest is Test {
      * @dev Fuzz test for approvals with various amounts
      */
     function testFuzz_Approve_VariousAmounts(uint256 mintAmount, uint256 approveAmount) public {
-        vm.assume(mintAmount > 0 && mintAmount <= type(uint128).max);
-        vm.assume(approveAmount <= type(uint128).max);
+        vm.assume(mintAmount > 0 && mintAmount <= stablecoin.maxSupply());
+        vm.assume(approveAmount <= stablecoin.maxSupply());
         
         // Mint tokens to user1
         vm.startPrank(minter);
@@ -128,8 +128,8 @@ contract StablecoinFuzzTest is Test {
         uint256 approveAmount, 
         uint256 transferAmount
     ) public {
-        vm.assume(mintAmount > 0 && mintAmount <= type(uint128).max);
-        vm.assume(approveAmount > 0 && approveAmount <= type(uint128).max);
+        vm.assume(mintAmount > 0 && mintAmount <= stablecoin.maxSupply());
+        vm.assume(approveAmount > 0 && approveAmount <= stablecoin.maxSupply());
         vm.assume(transferAmount > 0 && transferAmount <= approveAmount);
         vm.assume(transferAmount <= mintAmount);
         
@@ -166,7 +166,7 @@ contract StablecoinFuzzTest is Test {
         uint256 transferAmount,
         uint256 burnAmount
     ) public {
-        vm.assume(mintAmount > 0 && mintAmount <= type(uint128).max);
+        vm.assume(mintAmount > 0 && mintAmount <= stablecoin.maxSupply());
         vm.assume(approveAmount > 0 && approveAmount <= mintAmount);
         vm.assume(transferAmount > 0 && transferAmount <= approveAmount);
         vm.assume(burnAmount > 0 && burnAmount <= mintAmount - transferAmount);
@@ -218,7 +218,7 @@ contract StablecoinFuzzTest is Test {
      * @dev Fuzz test for boundary conditions
      */
     function testFuzz_BoundaryConditions(uint256 amount) public {
-        vm.assume(amount > 0 && amount <= type(uint128).max);
+        vm.assume(amount > 0 && amount <= stablecoin.maxSupply());
         
         // Test maximum mint
         vm.startPrank(minter);
@@ -263,7 +263,7 @@ contract StablecoinFuzzTest is Test {
         vm.startPrank(minter);
         
         for (uint256 i = 0; i < 5; i++) {
-            vm.assume(amounts[i] > 0 && amounts[i] <= type(uint128).max / 5);
+            vm.assume(amounts[i] > 0 && amounts[i] <= stablecoin.maxSupply() / 5);
             stablecoin.mint(users[i], amounts[i]);
             assertEq(stablecoin.balanceOf(users[i]), amounts[i]);
         }
@@ -282,7 +282,7 @@ contract StablecoinFuzzTest is Test {
      * @dev Fuzz test for allowance edge cases
      */
     function testFuzz_AllowanceEdgeCases(uint256 amount) public {
-        vm.assume(amount > 0 && amount <= type(uint128).max);
+        vm.assume(amount > 0 && amount <= stablecoin.maxSupply());
         
         // Mint tokens
         vm.startPrank(minter);
