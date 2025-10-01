@@ -20,7 +20,7 @@ contract CDPManagerFuzzTest is Test {
     MockERC20 public collateralToken;
     
     address public user = makeAddr("user");
-    address public admin = makeAddr("admin");
+    address public admin = address(this);
     
     uint256 public constant INITIAL_SUPPLY = 1000000 * 10**18;
     uint256 public constant LIQUIDATION_RATIO = 150; // 150% = 1.5x
@@ -47,7 +47,7 @@ contract CDPManagerFuzzTest is Test {
         vm.startPrank(admin);
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
-        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), admin);
         cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         
         // Register collateral

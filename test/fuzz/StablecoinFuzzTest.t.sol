@@ -12,7 +12,7 @@ import {Stablecoin} from "../../src/core/Stablecoin.sol";
 contract StablecoinFuzzTest is Test {
     Stablecoin public stablecoin;
     
-    address public admin = makeAddr("admin");
+    address public admin = address(this);
     address public minter = makeAddr("minter");
     address public burner = makeAddr("burner");
     address public user1 = makeAddr("user1");

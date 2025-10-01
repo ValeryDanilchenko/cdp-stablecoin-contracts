@@ -17,7 +17,7 @@ contract CDPManagerSimpleTest is Test {
     CollateralRegistry public collateralRegistry;
     MockERC20 public collateralToken;
     
-    address public admin = makeAddr("admin");
+    address public admin = address(this);
     address public user = makeAddr("user");
     
     uint256 public constant INITIAL_SUPPLY = 1000000 * 10**18;
@@ -36,7 +36,7 @@ contract CDPManagerSimpleTest is Test {
         vm.startPrank(admin);
         stablecoin.grantRole(stablecoin.MINTER_ROLE(), address(cdpManager));
         stablecoin.grantRole(stablecoin.BURNER_ROLE(), address(cdpManager));
-        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), address(cdpManager));
+        collateralRegistry.grantRole(collateralRegistry.COLLATERAL_MANAGER_ROLE(), admin);
         cdpManager.grantRole(cdpManager.DEFAULT_ADMIN_ROLE(), admin);
         vm.stopPrank();
         
