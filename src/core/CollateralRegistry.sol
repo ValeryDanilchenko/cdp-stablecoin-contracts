@@ -183,6 +183,16 @@ contract CollateralRegistry is AccessControl, ICollateralRegistry {
     }
 
     /**
+     * @notice Get liquidation penalty for a collateral type
+     * @param collateral Address of the collateral token
+     * @return Liquidation penalty in basis points
+     */
+    function getLiquidationPenalty(address collateral) external view returns (uint256) {
+        if (!isCollateralRegistered[collateral]) revert CollateralNotRegistered(collateral);
+        return collaterals[collateral].liquidationPenalty;
+    }
+
+    /**
      * @notice Get total debt for a collateral
      * @param collateral Address of the collateral token
      * @return Total debt amount

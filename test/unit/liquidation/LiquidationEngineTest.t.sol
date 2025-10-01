@@ -70,18 +70,18 @@ contract LiquidationEngineTest is Test {
 
     function test_CheckLiquidation_NotLiquidatable() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         assertFalse(liquidationEngine.checkLiquidation(cdpId));
     }
 
     function test_CheckLiquidation_Liquidatable() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         // Mint debt to make CDP liquidatable
         vm.prank(user);
-        cdpManager.mintStablecoin(cdpId, 80e18); // 80% of max debt
+        cdpManager.mintStablecoin(cdpId, 280e18); // Exceed liquidation ratio to make it liquidatable // 60% of max debt (within liquidation ratio)
         
         // Mark as liquidatable
         vm.prank(address(cdpManager));
@@ -98,23 +98,23 @@ contract LiquidationEngineTest is Test {
 
     function test_CalculateLiquidationPenalty_Success() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         vm.prank(user);
-        cdpManager.mintStablecoin(cdpId, 80e18);
+        cdpManager.mintStablecoin(cdpId, 280e18); // Exceed liquidation ratio to make it liquidatable
         
         vm.prank(address(cdpManager));
         liquidationEngine.markLiquidatable(cdpId);
         
         uint256 penalty = liquidationEngine.calculateLiquidationPenalty(cdpId);
-        uint256 expectedPenalty = (100e18 * LIQUIDATION_PENALTY) / 10000;
+        uint256 expectedPenalty = (400e18 * LIQUIDATION_PENALTY) / 10000;
         
         assertEq(penalty, expectedPenalty);
     }
 
     function test_CalculateLiquidationPenalty_RevertIf_NotLiquidatable() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         vm.expectRevert(ILiquidationEngine.CDPNotLiquidatable.selector);
         liquidationEngine.calculateLiquidationPenalty(cdpId);
@@ -122,10 +122,10 @@ contract LiquidationEngineTest is Test {
 
     function test_LiquidateCDP_Success() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         vm.prank(user);
-        cdpManager.mintStablecoin(cdpId, 80e18);
+        cdpManager.mintStablecoin(cdpId, 280e18); // Exceed liquidation ratio to make it liquidatable
         
         vm.prank(address(cdpManager));
         liquidationEngine.markLiquidatable(cdpId);
@@ -139,14 +139,14 @@ contract LiquidationEngineTest is Test {
         liquidationEngine.liquidateCDP(cdpId);
         
         uint256 liquidatorBalanceAfter = collateralToken.balanceOf(liquidator);
-        uint256 expectedPenalty = (100e18 * LIQUIDATION_PENALTY) / 10000;
+        uint256 expectedPenalty = (400e18 * LIQUIDATION_PENALTY) / 10000;
         
         assertEq(liquidatorBalanceAfter - liquidatorBalanceBefore, expectedPenalty);
     }
 
     function test_LiquidateCDP_RevertIf_NotLiquidatable() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         vm.prank(liquidator);
         vm.expectRevert(ILiquidationEngine.CDPNotLiquidatable.selector);
@@ -155,10 +155,10 @@ contract LiquidationEngineTest is Test {
 
     function test_LiquidateCDP_RevertIf_DelayNotMet() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         vm.prank(user);
-        cdpManager.mintStablecoin(cdpId, 80e18);
+        cdpManager.mintStablecoin(cdpId, 280e18); // Exceed liquidation ratio to make it liquidatable
         
         vm.prank(address(cdpManager));
         liquidationEngine.markLiquidatable(cdpId);
@@ -175,10 +175,10 @@ contract LiquidationEngineTest is Test {
 
     function test_LiquidateCDP_RevertIf_Unauthorized() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         vm.prank(user);
-        cdpManager.mintStablecoin(cdpId, 80e18);
+        cdpManager.mintStablecoin(cdpId, 280e18); // Exceed liquidation ratio to make it liquidatable
         
         vm.prank(address(cdpManager));
         liquidationEngine.markLiquidatable(cdpId);
@@ -213,10 +213,10 @@ contract LiquidationEngineTest is Test {
 
     function test_GetLiquidationInfo_Success() public {
         vm.prank(user);
-        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 100e18);
+        uint256 cdpId = cdpManager.openCDP(address(collateralToken), 400e18);
         
         vm.prank(user);
-        cdpManager.mintStablecoin(cdpId, 80e18);
+        cdpManager.mintStablecoin(cdpId, 280e18); // Exceed liquidation ratio to make it liquidatable
         
         vm.prank(address(cdpManager));
         liquidationEngine.markLiquidatable(cdpId);
