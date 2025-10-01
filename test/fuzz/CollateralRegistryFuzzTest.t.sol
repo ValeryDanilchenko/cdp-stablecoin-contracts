@@ -156,10 +156,10 @@ contract CollateralRegistryFuzzTest is Test {
     ) public {
         address collateral = makeAddr("collateral");
         
-        // Test minimum values
-        vm.assume(liquidationRatio == 10000); // Minimum 100% in basis points
-        vm.assume(liquidationPenalty == 0); // Minimum 0%
-        vm.assume(maxLiquidationRatio == liquidationRatio); // Minimum max ratio
+        // Test boundary values with simpler assumptions
+        vm.assume(liquidationRatio >= 10000 && liquidationRatio <= 50000); // 100% to 500% in basis points
+        vm.assume(liquidationPenalty <= 5000); // Max 50% in basis points (contract limit)
+        vm.assume(maxLiquidationRatio >= liquidationRatio); // Max ratio >= liquidation ratio
         
         vm.startPrank(registrar);
         collateralRegistry.addCollateral(
