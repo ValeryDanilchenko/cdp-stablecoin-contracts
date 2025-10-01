@@ -72,7 +72,7 @@ contract LiquidationEngine is AccessControl, ReentrancyGuard, Pausable, ILiquida
         uint256 debtAmount = cdpManager.getCDPDebt(cdpId);
 
         // Calculate liquidation penalty
-        uint256 penaltyRate = collateralRegistry.getLiquidationRatio(collateral);
+        uint256 penaltyRate = collateralRegistry.getLiquidationPenalty(collateral);
         uint256 penaltyAmount = (collateralAmount * penaltyRate) / 10000;
 
         // Ensure we don't seize more collateral than available
@@ -111,7 +111,7 @@ contract LiquidationEngine is AccessControl, ReentrancyGuard, Pausable, ILiquida
 
         address collateral = cdpManager.getCDPCollateral(cdpId);
         uint256 collateralAmount = cdpManager.getCDPCollateralAmount(cdpId);
-        uint256 penaltyRate = collateralRegistry.getLiquidationRatio(collateral);
+        uint256 penaltyRate = collateralRegistry.getLiquidationPenalty(collateral);
 
         return (collateralAmount * penaltyRate) / 10000;
     }
@@ -183,7 +183,7 @@ contract LiquidationEngine is AccessControl, ReentrancyGuard, Pausable, ILiquida
         debtValue = debtAmount; // Assuming 1:1 USD peg for stablecoin
 
         if (isLiquidatable) {
-            uint256 penaltyRate = collateralRegistry.getLiquidationRatio(collateral);
+            uint256 penaltyRate = collateralRegistry.getLiquidationPenalty(collateral);
             penaltyAmount = (collateralAmount * penaltyRate) / 10000;
             collateralToSeize = penaltyAmount;
         }

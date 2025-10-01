@@ -44,5 +44,6 @@ interface ICollateralRegistry {
     function getLiquidationRatio(address collateral) external view returns (uint256);
     function getStabilityFee(address collateral) external view returns (uint256);
     function getDebtCeiling(address collateral) external view returns (uint256);
+    function getLiquidationPenalty(address collateral) external view returns (uint256);
     function getTotalDebt(address collateral) external view returns (uint256);
 }
