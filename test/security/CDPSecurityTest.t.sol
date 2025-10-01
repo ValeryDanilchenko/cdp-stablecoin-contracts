@@ -58,9 +58,10 @@ contract CDPSecurityTest is Test {
         vm.startPrank(admin);
         collateralRegistry.addCollateral(
             address(collateralToken),
-            LIQUIDATION_RATIO,
-            LIQUIDATION_PENALTY,
-            MAX_LIQUIDATION_RATIO
+            LIQUIDATION_RATIO * 100, // Convert to basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         
@@ -201,9 +202,10 @@ contract CDPSecurityTest is Test {
         vm.expectRevert();
         collateralRegistry.addCollateral(
             address(collateralToken),
-            50, // Too low
-            LIQUIDATION_PENALTY,
-            MAX_LIQUIDATION_RATIO
+            5000, // Too low (50% in basis points)
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         
@@ -212,9 +214,10 @@ contract CDPSecurityTest is Test {
         vm.expectRevert();
         collateralRegistry.addCollateral(
             address(collateralToken),
-            LIQUIDATION_RATIO,
-            LIQUIDATION_PENALTY,
-            100 // Too low
+            LIQUIDATION_RATIO * 100, // Convert to basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
     }
@@ -228,9 +231,10 @@ contract CDPSecurityTest is Test {
         vm.expectRevert();
         collateralRegistry.addCollateral(
             address(collateralToken),
-            LIQUIDATION_RATIO,
-            100, // Too high
-            MAX_LIQUIDATION_RATIO
+            LIQUIDATION_RATIO * 100, // Convert to basis points
+            10000, // Too high (100% in basis points)
+            LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
     }
@@ -316,16 +320,17 @@ contract CDPSecurityTest is Test {
         vm.expectRevert();
         collateralRegistry.addCollateral(
             address(collateralToken),
-            LIQUIDATION_RATIO,
-            LIQUIDATION_PENALTY,
-            MAX_LIQUIDATION_RATIO
+            LIQUIDATION_RATIO * 100, // Convert to basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         
         // Attacker tries to unregister collateral
         vm.startPrank(attacker);
         vm.expectRevert();
-        collateralRegistry.unaddCollateral(address(collateralToken));
+        collateralRegistry.removeCollateral(address(collateralToken));
         vm.stopPrank();
     }
     

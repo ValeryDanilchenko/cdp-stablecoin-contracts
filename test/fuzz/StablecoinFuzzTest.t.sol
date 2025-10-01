@@ -26,7 +26,7 @@ contract StablecoinFuzzTest is Test {
     event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);
     
     function setUp() public {
-        stablecoin = new Stablecoin("TestStablecoin", "TST", admin);
+        stablecoin = new Stablecoin("TestStablecoin", "TST", 1000000000 * 10**18);
         
         // Setup roles
         vm.startPrank(admin);

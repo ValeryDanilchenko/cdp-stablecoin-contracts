@@ -57,9 +57,10 @@ contract CDPPerformanceTest is Test {
         vm.startPrank(admin);
         collateralRegistry.addCollateral(
             address(collateralToken),
-            LIQUIDATION_RATIO,
-            LIQUIDATION_PENALTY,
-            MAX_LIQUIDATION_RATIO
+            LIQUIDATION_RATIO * 100, // Convert to basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         
@@ -258,9 +259,10 @@ contract CDPPerformanceTest is Test {
         vm.startPrank(admin);
         collateralRegistry.addCollateral(
             address(newToken),
-            LIQUIDATION_RATIO,
-            LIQUIDATION_PENALTY,
-            MAX_LIQUIDATION_RATIO
+            LIQUIDATION_RATIO * 100, // Convert to basis points
+            200, // 2% stability fee
+            LIQUIDATION_PENALTY * 100, // Convert to basis points
+            1000000 * 10**18 // 1M debt ceiling
         );
         vm.stopPrank();
         uint256 gasUsed = gasStart - gasleft();
@@ -272,9 +274,9 @@ contract CDPPerformanceTest is Test {
         vm.startPrank(admin);
         collateralRegistry.updateCollateralParams(
             address(newToken),
-            LIQUIDATION_RATIO + 50,
-            LIQUIDATION_PENALTY + 5,
-            MAX_LIQUIDATION_RATIO + 50
+            (LIQUIDATION_RATIO + 50) * 100, // Convert to basis points
+            200, // 2% stability fee
+            (LIQUIDATION_PENALTY + 5) * 100 // Convert to basis points
         );
         vm.stopPrank();
         gasUsed = gasStart - gasleft();
@@ -284,7 +286,7 @@ contract CDPPerformanceTest is Test {
         // Benchmark collateral unregistration
         gasStart = gasleft();
         vm.startPrank(admin);
-        collateralRegistry.unaddCollateral(address(newToken));
+        collateralRegistry.removeCollateral(address(newToken));
         vm.stopPrank();
         gasUsed = gasStart - gasleft();
         console.log("Collateral Unregistration Gas Used:", gasUsed);
