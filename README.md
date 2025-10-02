@@ -2,7 +2,7 @@
 
 A comprehensive Collateralized Debt Position (CDP) stablecoin system inspired by MakerDAO's DAI, built with Solidity and Foundry.
 
-## ??? Architecture
+## Architecture
 
 This system implements a multi-collateral stablecoin protocol with the following core components:
 
@@ -11,7 +11,7 @@ This system implements a multi-collateral stablecoin protocol with the following
 - **Collateral Registry**: Multi-token collateral management system
 - **Liquidation Engine**: Automated liquidation mechanism for undercollateralized positions
 
-## ? Features
+## Features
 
 - **Multi-Collateral Support**: Accept multiple ERC20 tokens as collateral
 - **Configurable Parameters**: Adjustable liquidation ratios, stability fees, and penalties
@@ -20,7 +20,7 @@ This system implements a multi-collateral stablecoin protocol with the following
 - **Gas Optimized**: Efficient smart contract design for minimal gas costs
 - **Security Focused**: Built with security best practices and comprehensive audit trails
 
-## ?? Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -44,7 +44,7 @@ forge build
 forge test
 ```
 
-## ?? Usage
+## Usage
 
 ### Deploying the System
 
@@ -101,7 +101,7 @@ cdpManager.repayDebt(cdpId, 1000 * 10**18);
 cdpManager.withdrawCollateral(cdpId, address(ethToken), 2 * 10**18);
 ```
 
-## ?? Testing
+## Testing
 
 The project includes comprehensive test coverage:
 
@@ -128,21 +128,21 @@ forge test --match-contract Fuzz
 - **Security Tests**: Vulnerability and attack vector testing
 - **Performance Tests**: Gas optimization and benchmarking
 
-## ?? Test Results
+## Test Results
 
 Current test status: **64/98 tests passing (65%)**
 
 ### Passing Test Suites
-- ? StablecoinFuzzTest: 11/11 (100%)
-- ? CDPManagerTest: 12/12 (100%)
-- ? CDPManagerSimpleTest: 2/2 (100%)
+- StablecoinFuzzTest: 11/11 (100%)
+- CDPManagerTest: 12/12 (100%)
+- CDPManagerSimpleTest: 2/2 (100%)
 
 ### High Coverage Suites
-- ?? CDPManagerFuzzTest: 7/8 (87.5%)
-- ?? CDPSecurityTest: 14/18 (77.8%)
-- ?? CDPPerformanceTest: 8/11 (72.7%)
+- CDPManagerFuzzTest: 7/8 (87.5%)
+- CDPSecurityTest: 14/18 (77.8%)
+- CDPPerformanceTest: 8/11 (72.7%)
 
-## ?? Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -174,7 +174,7 @@ remappings = [
 ]
 ```
 
-## ??? Smart Contract Architecture
+## Smart Contract Architecture
 
 ### Core Contracts
 
@@ -201,7 +201,7 @@ src/
 - **Security First**: Comprehensive access controls and validation
 - **Event Logging**: Detailed event emission for off-chain monitoring
 
-## ?? Security Considerations
+## Security Considerations
 
 - **Access Control**: Role-based permissions for all administrative functions
 - **Reentrancy Protection**: Safe external call patterns
@@ -209,7 +209,7 @@ src/
 - **Input Validation**: Comprehensive parameter checking
 - **Pausable Operations**: Emergency stop functionality
 
-## ?? Gas Optimization
+## Gas Optimization
 
 The contracts are optimized for gas efficiency:
 
@@ -218,7 +218,7 @@ The contracts are optimized for gas efficiency:
 - **View Functions**: Gas-free read operations
 - **Event Optimization**: Minimal event data
 
-## ?? Deployment
+## Deployment
 
 ### Local Development
 
@@ -244,14 +244,13 @@ forge script script/Deploy.s.sol --rpc-url $SEPOLIA_RPC_URL --broadcast --verify
 forge script script/Deploy.s.sol --rpc-url $MAINNET_RPC_URL --broadcast --verify
 ```
 
-## ?? Documentation
+## Documentation
 
-- [Project Specification](docs/PROJECT_SPECIFICATION.md)
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - [API Reference](docs/API.md)
 - [Security Audit](docs/SECURITY.md)
 
-## ?? Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -259,17 +258,17 @@ forge script script/Deploy.s.sol --rpc-url $MAINNET_RPC_URL --broadcast --verify
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## ?? License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## ?? Acknowledgments
+## Acknowledgments
 
 - [OpenZeppelin](https://openzeppelin.com/) for secure contract libraries
 - [Foundry](https://book.getfoundry.sh/) for development framework
 - [MakerDAO](https://makerdao.com/) for inspiration and design patterns
 
-## ?? Contact
+## Contact
 
 - **Developer**: Valery Danilchenko
 - **Email**: valerius022@gmail.com
@@ -277,4 +276,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**?? Disclaimer**: This software is provided for educational and research purposes. Use in production at your own risk. Always conduct thorough security audits before deploying to mainnet.
+**Disclaimer**: This software is provided for educational and research purposes. Use in production at your own risk. Always conduct thorough security audits before deploying to mainnet.
